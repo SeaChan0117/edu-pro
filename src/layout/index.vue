@@ -1,6 +1,8 @@
 <template>
   <el-container>
-    <el-aside width="200px">Aside</el-aside>
+    <el-aside width="200px">
+      <Aside></Aside>
+    </el-aside>
     <el-container>
       <el-header>Header</el-header>
       <el-main>
@@ -13,9 +15,13 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import Aside from './components/app-aside.vue'
 
 export default Vue.extend({
-  name: 'LayoutIndex'
+  name: 'LayoutIndex',
+  components: {
+    Aside
+  }
 })
 </script>
 
