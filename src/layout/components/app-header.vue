@@ -14,7 +14,7 @@
       </span>
       <el-dropdown-menu slot="dropdown">
         <el-dropdown-item>{{ userInfo.userName }}</el-dropdown-item>
-        <el-dropdown-item divided>退出</el-dropdown-item>
+        <el-dropdown-item divided @click.native="logoutConfirm">退出</el-dropdown-item>
       </el-dropdown-menu>
     </el-dropdown>
   </div>
@@ -22,7 +22,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { getUserInfo } from '@/services/user'
+import { getUserInfo, logout } from '@/services/user'
 
 export default Vue.extend({
   name: 'AppHeader',
@@ -36,6 +36,36 @@ export default Vue.extend({
       const { data } = await getUserInfo()
       if (data.state === 1) {
         this.userInfo = data.content
+      }
+    },
+    logoutConfirm () {
+      this.$confirm('确认退出吗?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.logout()
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消'
+        })
+      })
+    },
+    async logout () {
+      const { data } = await logout()
+      if (data.state === 1) {
+        // 清除登录状态，跳转到登录页
+        this.$store.commit('setUser', null)
+        await this.$router.push({
+          name: 'login'
+        })
+        this.$message({
+          type: 'success',
+          message: '退出成功!'
+        })
+      } else {
+        this.$message.error(data.message)
       }
     }
   },

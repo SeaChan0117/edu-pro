@@ -29,3 +29,11 @@ export const getUserInfo = () => {
     url: '/front/user/getInfo'
   })
 }
+
+// 退出登录
+export const logout = () => {
+  return request({
+    method: 'POST',
+    url: '/front/user/logout'
+  })
+}
