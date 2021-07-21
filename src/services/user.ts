@@ -1,6 +1,5 @@
 import request from '@/utils/request'
 import qs from 'qs'
-import store from '@/store'
 
 interface LoginUser {
   phone: string
