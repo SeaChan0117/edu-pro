@@ -86,6 +86,9 @@ export default Vue.extend({
           // 失败 --> 给出提示
           this.$message.error(data.message)
         } else {
+          // 登录成功，记录登录状态，状态需要能够全局访问（放到 Vuex 中)
+          this.$store.commit('setUser', data.content)
+          // 然后在访问需要登录需要判断有没有登录状态（路由拦截器）
           // 成功 --> 跳转到首页
           this.$router.push({
             name: 'home'
