@@ -79,7 +79,10 @@ router.beforeEach((to, from, next) => {
     if (!store.state.user) {
       // 跳转到登录页面
       next({
-        name: 'login'
+        name: 'login',
+        query: {
+          redirect: to.fullPath
+        }
       })
     }
     next()
