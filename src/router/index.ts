@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import VueRouter, { RouteConfig } from 'vue-router'
 import Layout from '@/layout/index.vue'
+import store from '@/store'
 
 Vue.use(VueRouter)
 
@@ -19,6 +20,9 @@ const routes: Array<RouteConfig> = [
   {
     path: '/',
     component: Layout,
+    meta: {
+      requireAuth: true // 自定义数据
+    },
     children: [
       {
         path: '/',
@@ -66,6 +70,22 @@ const routes: Array<RouteConfig> = [
 
 const router = new VueRouter({
   routes
+})
+
+// 全局前置守卫，任何页面的访问都会经过这里
+router.beforeEach((to, from, next) => {
+  // to.matched: 匹配到的路由记录
+  if (to.matched.some(record => record.meta.requireAuth)) {
+    if (!store.state.user) {
+      // 跳转到登录页面
+      next({
+        name: 'login'
+      })
+    }
+    next()
+  } else {
+    next()
+  }
 })
 
 export default router
