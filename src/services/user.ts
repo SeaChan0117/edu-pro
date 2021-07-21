@@ -1,12 +1,14 @@
 import request from '@/utils/request'
 import qs from 'qs'
+import store from '@/store'
 
 interface LoginUser {
   phone: string
   password: string
 }
 
-export const login = (data: LoginUser): Promise<any> => {
+// 登录
+export const login = (data: LoginUser) => {
   return request({
     method: 'POST',
     // headers: {
@@ -17,5 +19,16 @@ export const login = (data: LoginUser): Promise<any> => {
     // 如果 data 是普通对象，则 content-type 是默认的 application/json
     // 如果 data 是 FormData，则 content-type 是 multipart/form-data
     data: qs.stringify(data) // axios 发送请求，默认是 application/json 格式的数据，我们需要 x-www-form-urlencoded 格式
+  })
+}
+
+// 获取用户信息
+export const getUserInfo = () => {
+  return request({
+    method: 'GET',
+    url: '/front/user/getInfo',
+    headers: {
+      Authorization: store.state.user.access_token
+    }
   })
 }
