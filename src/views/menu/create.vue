@@ -1,9 +1,6 @@
 <template>
   <div class="menu-create">
     <el-card class="box-card">
-      <div slot="header" class="clearfix">
-        <span>添加菜单</span>
-      </div>
       <el-form ref="form" :model="form" label-width="80px">
         <el-form-item label="菜单名称">
           <el-input v-model="form.name"></el-input>
@@ -56,11 +53,11 @@ export default Vue.extend({
   data () {
     return {
       form: {
-        name: '123',
-        href: '123',
+        name: '',
+        href: '',
         parentId: '-1',
-        icon: '123',
-        description: '123',
+        icon: '',
+        description: '',
         shown: false,
         orderNum: 1
       },

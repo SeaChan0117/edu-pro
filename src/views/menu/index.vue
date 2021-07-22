@@ -49,8 +49,8 @@
             label="操作"
             width="200">
             <template slot-scope="scope">
-              <el-button @click="editMenuHandle(scope.row)" type="text" size="small">编辑</el-button>
-              <el-button @click="delMenuHandle(scope.row)" type="text" size="small">删除</el-button>
+              <el-button @click="editMenuHandle(scope.row)" size="small">编辑</el-button>
+              <el-button @click="delMenuHandle(scope.row)" type="danger" size="small">删除</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -61,7 +61,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { getAllMenu } from '@/services/menu'
+import { getAllMenu, delMenu } from '@/services/menu'
 
 export default Vue.extend({
   name: 'MenuIndex',
@@ -81,7 +81,19 @@ export default Vue.extend({
       console.log(menu)
     },
     delMenuHandle (menu: any) {
-      console.log(menu)
+      this.$confirm('确认删除吗？', '删除提示')
+        .then(async () => {
+          // 确认
+          const { data } = await delMenu(menu.id)
+          if (data.code === '000000') {
+            this.$message.success('删除成功！')
+            await this.getAllMenuHandle()
+          }
+        })
+        .catch(() => {
+          // 取消
+          this.$message.info('已取消删除！')
+        })
     }
   },
   created () {

@@ -24,3 +24,10 @@ export const getAllMenu = () => {
     url: '/boss/menu/getAll'
   })
 }
+
+export const delMenu = (id: number) => {
+  return request({
+    method: 'DELETE',
+    url: `/boss/menu/${id}`
+  })
+}
