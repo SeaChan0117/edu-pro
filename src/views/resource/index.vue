@@ -97,7 +97,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { getAllCategory, getResourcePages } from '@/services/resource'
+import { delResource, getAllCategory, getResourcePages } from '@/services/resource'
 import ResourceCreateOrEdit from '@/views/resource/components/ResourceCreateOrEdit.vue'
 
 export default Vue.extend({
@@ -159,6 +159,17 @@ export default Vue.extend({
     },
     delResourceHandle (item: any) {
       console.log(item)
+      this.$confirm('确认删除该资源吗？', '删除提示')
+        .then(async () => {
+          const { data } = await delResource(item.id)
+          if (data.code === '000000') {
+            this.$message.success('删除成功！')
+            await this.initResourceTableData()
+          }
+        })
+        .catch(() => {
+          this.$message.info('取消删除！')
+        })
     }
   },
   created () {

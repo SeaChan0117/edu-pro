@@ -37,3 +37,10 @@ export const saveOrUpdateResource = (data: Resource) => {
     data
   })
 }
+
+export const delResource = (id: number) => {
+  return request({
+    method: 'DELETE',
+    url: `/boss/resource/${id}`
+  })
+}
