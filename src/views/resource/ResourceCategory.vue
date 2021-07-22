@@ -19,11 +19,11 @@
           min-width="150"
           prop="name"
           label="名称"
-          width="400">
+          width="300">
         </el-table-column>
         <el-table-column
           min-width="150"
-          width="350"
+          width="300"
           prop="createdTime"
           label="创建时间">
           <template slot-scope="scope">
@@ -34,13 +34,13 @@
           min-width="150"
           prop="sort"
           label="排序"
-          width="350">
+          width="300">
         </el-table-column>
         <el-table-column
           min-width="150"
           fixed="right"
           label="操作"
-          width="350">
+          width="300">
           <template slot-scope="scope">
             <el-button @click="editCateHandle(scope.row)" type="primary" size="mini">编辑</el-button>
             <el-button @click="delCateHandle(scope.row)" type="danger" size="mini">删除</el-button>

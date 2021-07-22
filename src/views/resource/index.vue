@@ -2,13 +2,13 @@
   <div class="resource">
     <el-card>
       <el-form :model="filterObj" ref="filter" label-width="120px">
-        <el-form-item label="资源名称：">
+        <el-form-item label="资源名称：" prop="name">
           <el-input v-model="filterObj.name" placeholder="资源名称" clearable></el-input>
         </el-form-item>
-        <el-form-item label="资源路径：">
+        <el-form-item label="资源路径：" prop="url">
           <el-input v-model="filterObj.url" placeholder="资源路径" clearable></el-input>
         </el-form-item>
-        <el-form-item label="资源分类：">
+        <el-form-item label="资源分类：" prop="categoryId">
           <el-select v-model="filterObj.categoryId" placeholder="全部" clearable>
             <el-option
               v-for="item in resourceCategory"
@@ -20,21 +20,23 @@
           </el-select>
         </el-form-item>
         <el-form-item>
-          <el-button size="mini" @click="resetFilter">重置</el-button>
-          <el-button size="mini" type="primary" @click="initResourceTableData">查询</el-button>
+          <el-button size="mini" @click="resetFilter" :disabled="loading">重置</el-button>
+          <el-button size="mini" type="primary" @click="search" :disabled="loading">查询</el-button>
         </el-form-item>
       </el-form>
       <el-divider></el-divider>
       <div>
-        <el-button type="primary" size="mini" @click="createOrEdit = true">添加</el-button>
-        <el-button type="primary" size="mini" @click="$router.push({name: 'resource-category'})">资源分类</el-button>
+        <el-button type="primary" size="mini" @click="createOrEdit = true" :disabled="loading">添加</el-button>
+        <el-button type="primary" size="mini" @click="$router.push({name: 'resource-category'})" :disabled="loading">资源分类</el-button>
       </div>
       <el-divider></el-divider>
       <el-table
         size="small"
         border
         :data="resources"
-        style="width: 100%">
+        v-loading="loading"
+        style="width: 100%"
+      >
         <el-table-column
           prop="id"
           label="编号"
@@ -78,6 +80,7 @@
       </el-table>
       <br/>
       <el-pagination
+        :disabled="loading"
         background
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
@@ -102,6 +105,7 @@
 import Vue from 'vue'
 import { delResource, getAllCategory, getResourcePages } from '@/services/resource'
 import ResourceCreateOrEdit from '@/views/resource/components/ResourceCreateOrEdit.vue'
+import { Form } from 'element-ui'
 
 export default Vue.extend({
   name: 'ResourceIndex',
@@ -121,7 +125,8 @@ export default Vue.extend({
       resourceCategory: [],
       resources: [],
       createOrEdit: false,
-      editResourceData: null
+      editResourceData: null,
+      loading: false
     }
   },
   methods: {
@@ -131,17 +136,23 @@ export default Vue.extend({
         this.resourceCategory = data.data
       }
     },
+    search () {
+      this.filterObj.current = 1
+      this.filterObj.size = 10
+      this.initResourceTableData()
+    },
     async initResourceTableData () {
+      this.loading = true
       const { data } = await getResourcePages(this.filterObj)
       if (data.code === '000000') {
         this.resources = data.data.records
         this.filterObj.total = data.data.total
       }
+      this.loading = false
     },
     resetFilter () {
-      this.filterObj.name = ''
-      this.filterObj.url = ''
-      this.filterObj.categoryId = ''
+      (this.$refs.filter as Form).resetFields()
+      this.search()
     },
     handleSizeChange (val: number) {
       this.filterObj.size = val
