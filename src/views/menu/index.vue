@@ -1,6 +1,6 @@
 <template>
   <div class="menu">
-    <el-card class="box-card">
+    <el-card>
       <div slot="header" class="clearfix">
         <el-button @click="$router.push({
           name: 'menu-create'
