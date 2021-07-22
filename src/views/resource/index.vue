@@ -3,13 +3,13 @@
     <el-card>
       <el-form :model="filterObj" ref="filter" label-width="120px">
         <el-form-item label="资源名称：">
-          <el-input v-model="filterObj.name" placeholder="资源名称"></el-input>
+          <el-input v-model="filterObj.name" placeholder="资源名称" clearable></el-input>
         </el-form-item>
         <el-form-item label="资源路径：">
-          <el-input v-model="filterObj.url" placeholder="资源路径"></el-input>
+          <el-input v-model="filterObj.url" placeholder="资源路径" clearable></el-input>
         </el-form-item>
         <el-form-item label="资源分类：">
-          <el-select v-model="filterObj.categoryId" placeholder="全部">
+          <el-select v-model="filterObj.categoryId" placeholder="全部" clearable>
             <el-option
               v-for="item in resourceCategory"
               :label="item.name"
@@ -26,7 +26,7 @@
       </el-form>
       <el-divider></el-divider>
       <div>
-        <el-button size="mini">添加</el-button>
+        <el-button size="mini" @click="createOrEdit = true">添加</el-button>
         <el-button size="mini">资源分类</el-button>
       </div>
       <el-divider></el-divider>
@@ -36,7 +36,7 @@
         :data="resources"
         style="width: 100%">
         <el-table-column
-          type="index"
+          prop="id"
           label="编号"
           align="center"
           width="50">
@@ -75,6 +75,7 @@
       </el-table>
       <br/>
       <el-pagination
+        background
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
         :current-page="filterObj.current"
@@ -84,16 +85,26 @@
         :total="filterObj.total">
       </el-pagination>
     </el-card>
+
+    <resource-create-or-edit
+      :show="createOrEdit"
+      v-if="createOrEdit"
+      :editResourceData="editResourceData"
+      :categories="resourceCategory"
+      @close="resourceCreateOrEditClose"/>
   </div>
 </template>
 
 <script lang="ts">
 import Vue from 'vue'
 import { getAllCategory, getResourcePages } from '@/services/resource'
-import { Form } from 'element-ui'
+import ResourceCreateOrEdit from '@/views/resource/components/ResourceCreateOrEdit.vue'
 
 export default Vue.extend({
   name: 'ResourceIndex',
+  components: {
+    ResourceCreateOrEdit
+  },
   data () {
     return {
       filterObj: {
@@ -105,7 +116,9 @@ export default Vue.extend({
         total: 0
       },
       resourceCategory: [],
-      resources: []
+      resources: [],
+      createOrEdit: false,
+      editResourceData: null
     }
   },
   methods: {
@@ -135,8 +148,14 @@ export default Vue.extend({
       this.filterObj.current = val
       this.initResourceTableData()
     },
+    resourceCreateOrEditClose () {
+      this.createOrEdit = false
+      this.editResourceData = null
+      this.initResourceTableData()
+    },
     editResourceHandle (item: any) {
-      console.log(item)
+      this.editResourceData = item
+      this.createOrEdit = true
     },
     delResourceHandle (item: any) {
       console.log(item)
