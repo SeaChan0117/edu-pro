@@ -61,6 +61,9 @@
           min-width="150"
           prop="createdTime"
           label="添加时间">
+          <template slot-scope="scope">
+            <span>{{scope.row.createdTime | date}}</span>
+          </template>
         </el-table-column>
         <el-table-column
           min-width="150"
