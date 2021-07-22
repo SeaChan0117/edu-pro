@@ -17,3 +17,10 @@ export const getEditMenuInfo = (id = -1) => {
     }
   })
 }
+
+export const getAllMenu = () => {
+  return request({
+    method: 'GET',
+    url: '/boss/menu/getAll'
+  })
+}
