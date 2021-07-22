@@ -78,7 +78,12 @@ export default Vue.extend({
       }
     },
     editMenuHandle (menu: any) {
-      console.log(menu)
+      this.$router.push({
+        name: 'menu-edit',
+        query: {
+          id: menu.id
+        }
+      })
     },
     delMenuHandle (menu: any) {
       this.$confirm('确认删除吗？', '删除提示')
