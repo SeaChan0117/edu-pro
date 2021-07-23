@@ -1,14 +1,14 @@
 <template>
   <div class="role">
     <el-card>
-      <el-form :model="filter" size="small">
+      <el-form :model="filter" ref="filter" size="small">
         <div class="filter-content">
-          <el-form-item label="角色名称" label-width="120px">
+          <el-form-item label="角色名称" label-width="120px" prop="name">
             <el-input placeholder="角色名称" v-model="filter.name" clearable></el-input>
           </el-form-item>
           <el-form-item>
-            <el-button size="mini">重置</el-button>
-            <el-button type="primary" size="mini">查询</el-button>
+            <el-button size="mini" @click="resetForm">重置</el-button>
+            <el-button type="primary" size="mini" @click="initRoles">查询</el-button>
           </el-form-item>
         </div>
       </el-form>
@@ -16,7 +16,7 @@
       <el-divider></el-divider>
 
       <div>
-        <el-button size="mini" type="primary">添加角色</el-button>
+        <el-button size="mini" type="primary" @click="createOrEditFlag = true">添加角色</el-button>
       </div>
 
       <el-divider></el-divider>
@@ -58,30 +58,36 @@
           fixed="right"
           label="操作"
           width="150">
-          <template>
+          <template slot-scope="scope">
             <el-button type="text" size="mini">分配菜单</el-button>
             <el-button type="text" size="mini">分配资源</el-button>
-            <el-button type="text" size="mini">编辑</el-button>
+            <el-button type="text" size="mini" @click="editRole(scope.row)">编辑</el-button>
             <el-button type="text" size="mini">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
     </el-card>
+    <create-or-edit v-if="createOrEditFlag" :show="createOrEditFlag" :edit-data="editData" @close="createOrEditClose"/>
   </div>
 </template>
 
 <script lang="ts">
 import Vue from 'vue'
 import { getRolesList } from '@/services/role'
+import { Form } from 'element-ui'
+import CreateOrEdit from '@/views/role/components/CreateOrEdit.vue'
 
 export default Vue.extend({
   name: 'RoleIndex',
+  components: { CreateOrEdit },
   data () {
     return {
       filter: {
         name: ''
       },
-      roles: []
+      roles: [],
+      createOrEditFlag: false,
+      editData: null
     }
   },
   methods: {
@@ -90,6 +96,19 @@ export default Vue.extend({
       if (data.code === '000000') {
         this.roles = data.data.records
       }
+    },
+    resetForm () {
+      (this.$refs.filter as Form).resetFields()
+      this.initRoles()
+    },
+    createOrEditClose () {
+      this.createOrEditFlag = false
+      this.editData = null
+      this.initRoles()
+    },
+    editRole (role: any) {
+      this.editData = role
+      this.createOrEditFlag = true
     }
   },
   created () {
