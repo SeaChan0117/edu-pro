@@ -10,6 +10,7 @@ interface Role {
   code: string
   description: string
 }
+
 export const getRolesList = (data: FilterRole) => {
   return request({
     method: 'POST',
@@ -23,5 +24,12 @@ export const addOrUpdateRole = (data: Role) => {
     method: 'POST',
     url: '/boss/role/saveOrUpdate',
     data
+  })
+}
+
+export const delRole = (id: number) => {
+  return request({
+    method: 'DELETE',
+    url: `/boss/role/${id}`
   })
 }

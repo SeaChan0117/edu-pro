@@ -62,7 +62,7 @@
             <el-button type="text" size="mini">分配菜单</el-button>
             <el-button type="text" size="mini">分配资源</el-button>
             <el-button type="text" size="mini" @click="editRole(scope.row)">编辑</el-button>
-            <el-button type="text" size="mini">删除</el-button>
+            <el-button type="text" size="mini" @click="delRole(scope.row)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -73,7 +73,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { getRolesList } from '@/services/role'
+import { delRole, getRolesList } from '@/services/role'
 import { Form } from 'element-ui'
 import CreateOrEdit from '@/views/role/components/CreateOrEdit.vue'
 
@@ -109,6 +109,19 @@ export default Vue.extend({
     editRole (role: any) {
       this.editData = role
       this.createOrEditFlag = true
+    },
+    delRole (role: any) {
+      this.$confirm('确认删除该角色吗？', '删除提示')
+        .then(async () => {
+          const { data } = await delRole(role.id)
+          if (data.code === '000000') {
+            this.$message.success('删除成功！')
+            await this.initRoles()
+          }
+        })
+        .catch(() => {
+          this.$message.info('取消删除！')
+        })
     }
   },
   created () {
