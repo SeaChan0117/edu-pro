@@ -7,8 +7,8 @@
             <el-input placeholder="角色名称" v-model="filter.name" clearable></el-input>
           </el-form-item>
           <el-form-item>
-            <el-button size="mini" @click="resetForm">重置</el-button>
-            <el-button type="primary" size="mini" @click="initRoles">查询</el-button>
+            <el-button size="mini" @click="resetForm" :disabled="loading">重置</el-button>
+            <el-button type="primary" size="mini" @click="initRoles" :disabled="loading">查询</el-button>
           </el-form-item>
         </div>
       </el-form>
@@ -16,12 +16,13 @@
       <el-divider></el-divider>
 
       <div>
-        <el-button size="mini" type="primary" @click="createOrEditFlag = true">添加角色</el-button>
+        <el-button size="mini" type="primary" @click="createOrEditFlag = true" :disabled="loading">添加角色</el-button>
       </div>
 
       <el-divider></el-divider>
 
       <el-table
+        v-loading="loading"
         size="small"
         border
         :data="roles"
@@ -61,7 +62,7 @@
           <template slot-scope="scope">
             <el-button type="text" size="mini" @click="$router.push({
               name: 'alloc-menu',
-              query: {
+              params: {
                 roleId: scope.row.id
               }
             })">
@@ -69,7 +70,7 @@
             </el-button>
             <el-button type="text" size="mini" @click="$router.push({
               name: 'alloc-resource',
-              query: {
+              params: {
                 roleId: scope.row.id
               }
             })">
@@ -101,15 +102,18 @@ export default Vue.extend({
       },
       roles: [],
       createOrEditFlag: false,
-      editData: null
+      editData: null,
+      loading: false
     }
   },
   methods: {
     async initRoles () {
+      this.loading = true
       const { data } = await getRolesList(this.filter)
       if (data.code === '000000') {
         this.roles = data.data.records
       }
+      this.loading = false
     },
     resetForm () {
       (this.$refs.filter as Form).resetFields()

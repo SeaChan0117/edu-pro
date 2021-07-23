@@ -80,14 +80,16 @@ const routes: Array<RouteConfig> = [
         component: () => import(/* webpackChunkName: 'resource-category' */ '@/views/resource/ResourceCategory.vue')
       },
       {
-        path: '/alloc-menu',
+        path: '/role/:roleId/alloc-menu',
         name: 'alloc-menu',
-        component: () => import(/* webpackChunkNameL 'alloc-menu' */ '@/views/role/AllocMenu.vue')
+        component: () => import(/* webpackChunkNameL 'alloc-menu' */ '@/views/role/AllocMenu.vue'),
+        props: true // 将路由参数映射到组件的 props 数据中
       },
       {
-        path: '/alloc-resource',
+        path: '/role/:roleId/alloc-resource',
         name: 'alloc-resource',
-        component: () => import(/* webpackChunkNameL 'alloc-resource' */ '@/views/role/AllocResource.vue')
+        component: () => import(/* webpackChunkNameL 'alloc-resource' */ '@/views/role/AllocResource.vue'),
+        props: true
       }
     ]
   }

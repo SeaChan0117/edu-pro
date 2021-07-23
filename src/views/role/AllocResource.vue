@@ -6,7 +6,13 @@
 import Vue from 'vue'
 
 export default Vue.extend({
-  name: 'AllocResource'
+  name: 'AllocResource',
+  props: {
+    roleId: {
+      type: [String, Number],
+      required: true
+    }
+  }
 })
 </script>
 
