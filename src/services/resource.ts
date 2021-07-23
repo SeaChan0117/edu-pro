@@ -65,3 +65,10 @@ export const delCategory = (id: number) => {
     url: `/boss/resource/category/${id}`
   })
 }
+
+export const getResourceById = (id: number) => {
+  return request({
+    method: 'GET',
+    url: `/boss/resource/${id}`
+  })
+}

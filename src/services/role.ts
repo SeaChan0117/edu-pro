@@ -33,3 +33,10 @@ export const delRole = (id: number) => {
     url: `/boss/role/${id}`
   })
 }
+
+export const getRoleById = (id: number) => {
+  return request({
+    method: 'GET',
+    url: `/boss/role/${id}`
+  })
+}

@@ -35,7 +35,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { saveOrUpdateResource } from '@/services/resource'
+import { getResourceById, saveOrUpdateResource } from '@/services/resource'
 
 export default Vue.extend({
   name: 'ResourceCreateOrEdit',
@@ -78,13 +78,19 @@ export default Vue.extend({
       } else {
         this.$message.error(data.mesg)
       }
+    },
+    async initResource () {
+      if (this.editResourceData) {
+        this.isEdit = true
+        const { data } = await getResourceById(this.editResourceData.id)
+        if (data.code === '000000') {
+          this.resource = data.data
+        }
+      }
     }
   },
   created () {
-    if (this.editResourceData) {
-      this.isEdit = true
-      this.resource = this.editResourceData
-    }
+    this.initResource()
   }
 })
 </script>

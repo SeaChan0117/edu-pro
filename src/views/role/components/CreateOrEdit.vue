@@ -24,7 +24,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { addOrUpdateRole } from '@/services/role'
+import { addOrUpdateRole, getRoleById } from '@/services/role'
 
 export default Vue.extend({
   name: 'CreateOrEdit',
@@ -61,11 +61,19 @@ export default Vue.extend({
       } else {
         this.$message.error(data.mesg)
       }
+    },
+    async initRole () {
+      if (this.editData) {
+        this.isEdit = true
+        const { data } = await getRoleById(this.editData.id)
+        if (data.code === '000000') {
+          this.role = data.data
+        }
+      }
     }
   },
   created () {
-    this.isEdit = !!this.editData
-    this.role = this.editData || this.role
+    this.initRole()
   }
 })
 
