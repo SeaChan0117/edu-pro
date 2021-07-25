@@ -19,10 +19,11 @@
           </el-date-picker>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="initUsers">查询</el-button>
+          <el-button type="primary" @click="initUsers" :disabled="loading">查询</el-button>
         </el-form-item>
       </el-form>
       <el-table
+        v-loading="loading"
         size="mini"
         :data="usersData"
         style="width: 100%;border-top: 1px solid #eeeeee">
@@ -165,6 +166,7 @@ export default Vue.extend({
   },
   methods: {
     async initUsers () {
+      this.loading = true
       const startCreateTime = this.filterObj.datePicker && this.filterObj.datePicker.length && this.filterObj.datePicker[0] ? this.filterObj.datePicker[0] : ''
       const endCreateTime = this.filterObj.datePicker && this.filterObj.datePicker.length && this.filterObj.datePicker[1] ? this.filterObj.datePicker[1] : ''
       const { data } = await getUsers({
@@ -178,6 +180,7 @@ export default Vue.extend({
         this.usersData = data.data.records
         this.filterObj.total = data.data.total
       }
+      this.loading = false
     },
     async changeStatus (user: any) {
       const { data } = await forbidUser(user.id)

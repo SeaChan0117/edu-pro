@@ -2,13 +2,18 @@
   <div class="menu">
     <el-card>
       <div slot="header" class="clearfix">
-        <el-button @click="$router.push({
+        <el-button
+          type="primary"
+          size="mini"
+          :disabled="loading"
+          @click="$router.push({
           name: 'menu-create'
         })">添加菜单
         </el-button>
       </div>
       <template>
         <el-table
+          v-loading="loading"
           size="small"
           border
           :data="menus"
@@ -67,15 +72,18 @@ export default Vue.extend({
   name: 'MenuIndex',
   data () {
     return {
-      menus: []
+      menus: [],
+      loading: false
     }
   },
   methods: {
     async getAllMenuHandle () {
+      this.loading = true
       const { data } = await getAllMenu()
       if (data.code === '000000') {
         this.menus = data.data
       }
+      this.loading = false
     },
     editMenuHandle (menu: any) {
       this.$router.push({
