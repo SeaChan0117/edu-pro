@@ -36,3 +36,21 @@ export const logout = () => {
     url: '/front/user/logout'
   })
 }
+
+export const getUsers = (data: any) => {
+  return request({
+    method: 'POST',
+    url: '/boss/user/getUserPages',
+    data
+  })
+}
+
+export const forbidUser = (userId: any) => {
+  return request({
+    method: 'POST',
+    url: '/boss/user/forbidUser',
+    data: {
+      userId
+    }
+  })
+}

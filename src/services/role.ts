@@ -40,3 +40,25 @@ export const getRoleById = (id: number) => {
     url: `/boss/role/${id}`
   })
 }
+
+export const getAllRoles = () => {
+  return request({
+    method: 'GET',
+    url: '/boss/role/all'
+  })
+}
+
+export const getRoleByUserId = (userId: any) => {
+  return request({
+    method: 'GET',
+    url: `/boss/role/user/${userId}`
+  })
+}
+
+export const allocateUserRoles = (data: any) => {
+  return request({
+    method: 'POST',
+    url: '/boss/role/allocateUserRoles',
+    data
+  })
+}
