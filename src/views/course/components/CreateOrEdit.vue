@@ -112,7 +112,8 @@
       </div>
       <div v-show="curStep===4">
         <el-form-item label="课程详情" prop="courseDescriptionMarkDown">
-          <el-input type="textarea" v-model="course.courseDescriptionMarkDown"></el-input>
+<!--          <el-input type="textarea" v-model="course.courseDescriptionMarkDown"></el-input>-->
+          <text-editor v-model="course.courseDescriptionMarkDown" />
         </el-form-item>
         <el-form-item label="是否发布" prop="status">
           <el-switch
@@ -146,10 +147,11 @@
 import Vue from 'vue'
 import CourseImg from '@/views/course/components/CourseImg.vue'
 import { createOrUpdate, getCourseById } from '@/services/course'
+import TextEditor from '@/components/TextEditor/index.vue'
 
 export default Vue.extend({
   name: 'CreateOrEdit',
-  components: { CourseImg },
+  components: { CourseImg, TextEditor },
   props: {
     isEdit: {
       type: Boolean,
