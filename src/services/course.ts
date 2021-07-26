@@ -32,3 +32,13 @@ export const createOrUpdate = (data: any) => {
     data
   })
 }
+
+export const getCourseById = (courseId: any) => {
+  return request({
+    method: 'GET',
+    url: '/boss/course/getCourseById',
+    params: {
+      courseId
+    }
+  })
+}

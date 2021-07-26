@@ -19,7 +19,9 @@
           <el-button type="primary" @click="initCourses" :disabled="loading">查询</el-button>
         </el-form-item>
         <el-form-item style="float: right">
-          <el-button type="primary" icon="el-icon-plus" :disabled="loading" @click="$router.push({name: 'course-create'})">新建课程</el-button>
+          <el-button type="primary" icon="el-icon-plus" :disabled="loading"
+                     @click="$router.push({name: 'course-create'})">新建课程
+          </el-button>
         </el-form-item>
       </el-form>
       <br>
@@ -71,7 +73,15 @@
               >
                 {{ scope.row.status === 0 ? '上架' : '下架' }}
               </el-button>
-              <el-button size="mini" type="primary">编辑</el-button>
+              <el-button
+                size="mini"
+                type="primary"
+                @click="$router.push({
+                name: 'course-edit',
+                 params: {
+                  courseId: scope.row.id
+                 }
+                })">编辑</el-button>
               <el-button size="mini" type="primary">内容管理</el-button>
             </span>
           </template>
