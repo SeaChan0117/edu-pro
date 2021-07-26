@@ -15,3 +15,20 @@ export const changeCourseStatus = (params: any) => {
     params
   })
 }
+
+export const uploadImg = (data: FormData, onUploadProgress: (progressEvent: any) => void) => {
+  return request({
+    method: 'POST',
+    url: '/boss/course/upload',
+    data,
+    onUploadProgress
+  })
+}
+
+export const createOrUpdate = (data: any) => {
+  return request({
+    method: 'POST',
+    url: '/boss/course/saveOrUpdateCourse',
+    data
+  })
+}

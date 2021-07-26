@@ -19,7 +19,7 @@
           <el-button type="primary" @click="initCourses" :disabled="loading">查询</el-button>
         </el-form-item>
         <el-form-item style="float: right">
-          <el-button type="primary" icon="el-icon-plus" :disabled="loading">新建课程</el-button>
+          <el-button type="primary" icon="el-icon-plus" :disabled="loading" @click="$router.push({name: 'course-create'})">新建课程</el-button>
         </el-form-item>
       </el-form>
       <br>
