@@ -41,7 +41,7 @@
           prop="price"
           label="价格">
           <template slot-scope="scope">
-            <span>{{scope.row.price ? `￥${scope.row.price}` : ''}}</span>
+            <span>{{ scope.row.price ? `￥${scope.row.price}` : '' }}</span>
           </template>
         </el-table-column>
         <el-table-column
@@ -52,7 +52,12 @@
           prop="status"
           label="状态">
           <template slot-scope="scope">
-            <span class="down-status" :class="{'up-status': scope.row.status}" @click="changeStatus(scope.row)"></span>
+            <span
+              class="down-status"
+              :class="{'up-status': scope.row.status}"
+              :title="scope.row.status === 1 ? '上架' : '下架'"
+              @click="changeStatus(scope.row)">
+            </span>
           </template>
         </el-table-column>
         <el-table-column
@@ -90,7 +95,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { pageQueryCourse } from '@/services/course'
+import { changeCourseStatus, pageQueryCourse } from '@/services/course'
 
 export default Vue.extend({
   name: 'CourseList',
@@ -139,8 +144,15 @@ export default Vue.extend({
       this.filterObj.currentPage = val
       this.initCourses()
     },
-    changeStatus (course: any) {
-      console.log(course)
+    async changeStatus (course: any) {
+      const status = parseInt(course.status) === 1 ? 0 : 1
+      const { data } = await changeCourseStatus({
+        courseId: course.id,
+        status
+      })
+      if (data.code === '000000') {
+        course.status = status
+      }
     }
   },
   created () {

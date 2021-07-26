@@ -7,3 +7,11 @@ export const pageQueryCourse = (data: any) => {
     data
   })
 }
+
+export const changeCourseStatus = (params: any) => {
+  return request({
+    method: 'GET',
+    url: '/boss/course/changeState',
+    params
+  })
+}
