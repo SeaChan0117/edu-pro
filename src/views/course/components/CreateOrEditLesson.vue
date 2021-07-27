@@ -1,5 +1,5 @@
 <template>
-  <el-form :model="lesson" size="small" label-width="100px">
+  <el-form :model="lesson" size="small" label-width="100px" v-loading="loading">
     <el-form-item label="课程名称" prop="courseName">
       <el-input v-model="lesson.courseName" disabled></el-input>
     </el-form-item>
@@ -68,11 +68,13 @@ export default {
         isFree: false,
         orderNum: undefined,
         courseId: ''
-      }
+      },
+      loading: false
     }
   },
   methods: {
     async submit () {
+      this.loading = true
       const { data } = await saveOrUpdateLesson(this.lesson)
       if (data.code === '000000') {
         this.$message.success(`课时${this.isEdit ? '编辑' : '新增'}成功！`)
@@ -80,6 +82,7 @@ export default {
       } else {
         this.$message.error(data.mesg)
       }
+      this.loading = false
     },
     async initSection () {
       const { data } = await getBySectionId(this.sectionId)

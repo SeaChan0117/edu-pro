@@ -1,5 +1,5 @@
 <template>
-  <el-card class="section">
+  <el-card class="section" v-loading="loading">
     <div slot="header" class="clearfix">
       <el-button type="text" icon="el-icon-back" size="mini" @click="$router.back()">返回</el-button>
       <el-divider direction="vertical"/>
@@ -148,7 +148,8 @@ export default Vue.extend({
       lessonDialogShow: false,
       sectionIdForLesson: '',
       editLessonFlag: false,
-      editLessonId: ''
+      editLessonId: '',
+      loading: false
     }
   },
   methods: {
@@ -156,10 +157,12 @@ export default Vue.extend({
       console.log(data)
     },
     async initSectionData () {
+      this.loading = true
       const { data } = await getSections(this.courseId)
       if (data.code === '000000') {
         this.sectionData = data.data
       }
+      this.loading = false
     },
     async getCourse () {
       const { data } = await getCourseById(this.courseId)

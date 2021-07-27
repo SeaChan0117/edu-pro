@@ -1,5 +1,5 @@
 <template>
-  <el-form :model="section" label-width="80px" size="small">
+  <el-form :model="section" label-width="80px" size="small" v-loading="loading">
     <el-form-item label="课程名称" prop="courseName">
       <el-input v-model="section.courseName" disabled></el-input>
     </el-form-item>
@@ -50,7 +50,8 @@ export default Vue.extend({
         sectionName: '',
         description: '',
         orderNum: ''
-      }
+      },
+      loading: false
     }
   },
   methods: {
@@ -65,6 +66,7 @@ export default Vue.extend({
       this.section.courseName = this.course.courseName
     },
     async submit () {
+      this.loading = true
       const { data } = await saveOrUpdateSection(this.section)
       if (data.code === '000000') {
         this.$message.success(`章节${this.isEdit ? '编辑' : '新增'}成功！`)
@@ -72,6 +74,7 @@ export default Vue.extend({
       } else {
         this.$message.error(data.mesg)
       }
+      this.loading = false
     }
   },
   created () {
