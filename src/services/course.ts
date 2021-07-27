@@ -50,3 +50,13 @@ export const saveOrUpdateLesson = (data: any) => {
     data
   })
 }
+
+export const getLessonById = (lessonId: any) => {
+  return request({
+    method: 'GET',
+    url: '/boss/course/lesson/getById',
+    params: {
+      lessonId
+    }
+  })
+}

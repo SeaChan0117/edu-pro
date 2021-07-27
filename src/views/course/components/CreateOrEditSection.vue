@@ -55,9 +55,11 @@ export default Vue.extend({
   },
   methods: {
     async initSection () {
-      const { data } = await getBySectionId(this.sectionId)
-      if (data.code === '000000') {
-        this.section = data.data
+      if (this.isEdit) {
+        const { data } = await getBySectionId(this.sectionId)
+        if (data.code === '000000') {
+          this.section = data.data
+        }
       }
       this.section.courseId = this.course.id
       this.section.courseName = this.course.courseName
@@ -73,7 +75,7 @@ export default Vue.extend({
     }
   },
   created () {
-    this.isEdit && this.initSection()
+    this.initSection()
   }
 })
 </script>
