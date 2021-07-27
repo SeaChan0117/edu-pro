@@ -3,7 +3,7 @@
     <div slot="header" class="clearfix">
       <el-button type="text" icon="el-icon-back" size="mini" @click="$router.back()">返回</el-button>
       <el-divider direction="vertical"/>
-      <span>新增课程</span>
+      <span>{{ isEdit ? '编辑课程' : '新增课程' }}</span>
     </div>
     <el-steps
       :active="curStep"

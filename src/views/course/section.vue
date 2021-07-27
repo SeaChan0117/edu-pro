@@ -1,0 +1,168 @@
+<template>
+  <el-card class="section">
+    <div slot="header" class="clearfix">
+      <el-button type="text" icon="el-icon-back" size="mini" @click="$router.back()">返回</el-button>
+      <el-divider direction="vertical"/>
+      <span>{{ course.courseName }}</span>
+      <el-button
+        style="float: right;"
+        type="primary"
+        icon="el-icon-plus"
+        size="small"
+        @click="sectionDialogShow = true"
+      >
+        添加阶段
+      </el-button>
+    </div>
+
+    <el-tree :data="sectionData" :props="defaultProps" @node-click="handleNodeClick">
+      <div class="section-row" slot-scope="{node, data}">
+        <span>
+          {{ node.label }}
+        </span>
+        <span v-if="data.sectionName" class="actions">
+          <el-button size="mini">编辑</el-button>
+          <el-button type="primary" size="mini">添加课时</el-button>
+          <el-select
+            v-model="data.status"
+            size="mini"
+            @change="(val) => {
+              changeSectionStatus(val, data)
+            }"
+            style="width: 90px;margin-left: 10px;">
+            <el-option
+              v-for="sta in status"
+              :key="sta.code"
+              :value="sta.code"
+              :label="sta.label"
+            >
+            </el-option>
+          </el-select>
+        </span>
+        <span v-else class="actions">
+          <el-button size="mini">编辑</el-button>
+          <el-button type="success" size="mini">上传视频</el-button>
+          <el-button size="mini">已隐藏</el-button>
+        </span>
+      </div>
+    </el-tree>
+
+    <el-dialog
+      title="章节信息"
+      :visible.sync="sectionDialogShow"
+      v-if="sectionDialogShow"
+      width="500px">
+      <create-or-edit-section
+        :course="course"
+        @cancel="sectionDialogShow = false"
+        @success="onSuccess"
+      />
+    </el-dialog>
+  </el-card>
+</template>
+
+<script lang="ts">
+import Vue from 'vue'
+import { getBySectionId, getSections, saveOrUpdateSection } from '@/services/section'
+import { getCourseById } from '@/services/course'
+import CreateOrEditSection from './components/CreateOrEditSection.vue'
+
+export default Vue.extend({
+  name: 'section',
+  components: { CreateOrEditSection },
+  props: {
+    courseId: {
+      type: [String, Number],
+      required: true
+    }
+  },
+  data () {
+    return {
+      course: {},
+      sectionDialogShow: false,
+      sectionData: [],
+      defaultProps: {
+        children: 'lessonDTOS',
+        label (node: any) {
+          return node.sectionName || node.theme
+        }
+      },
+      status: [
+        {
+          code: 0,
+          label: '已隐藏'
+        },
+        {
+          code: 1,
+          label: '待更新'
+        },
+        {
+          code: 2,
+          label: '已更新'
+        }
+      ]
+    }
+  },
+  methods: {
+    handleNodeClick (data: any) {
+      console.log(data)
+    },
+    async initSectionData () {
+      const { data } = await getSections(this.courseId)
+      if (data.code === '000000') {
+        this.sectionData = data.data
+      }
+    },
+    async getCourse () {
+      const { data } = await getCourseById(this.courseId)
+      this.course = data.data
+    },
+    onSuccess () {
+      this.sectionDialogShow = false
+      this.initSectionData()
+    },
+    changeSectionStatus (val: any, section: any) {
+      const status = (this.status.find((item: any) => item.code === val) as any).label
+      this.$confirm(`确定将状态改为 ${status} 吗？`, '修改状态')
+        .then(async () => {
+          const { data } = await saveOrUpdateSection({
+            id: section.id,
+            status: val
+          })
+          if (data.code === '000000') {
+            this.$message.success('状态更新成功！')
+          }
+        })
+        .catch(async () => {
+          const { data } = await getBySectionId(section.id)
+          section.status = data.data.status
+          this.$message.info('取消')
+        })
+    }
+  },
+  created () {
+    this.initSectionData()
+    this.getCourse()
+  }
+})
+</script>
+
+<style lang="scss" scoped>
+.section {
+  .section-row {
+    padding: 8px;
+    flex: 1;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #ebeef5;
+
+    .actions {
+    }
+  }
+
+  ::v-deep .el-tree-node__content {
+    height: auto;
+  }
+}
+</style>

@@ -82,7 +82,16 @@
                   courseId: scope.row.id
                  }
                 })">编辑</el-button>
-              <el-button size="mini" type="primary">内容管理</el-button>
+              <el-button
+                size="mini"
+                type="primary"
+                @click="$router.push({
+                name: 'course-section',
+                 params: {
+                  courseId: scope.row.id
+                 }
+                })"
+              >内容管理</el-button>
             </span>
           </template>
         </el-table-column>
