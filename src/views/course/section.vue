@@ -15,7 +15,13 @@
       </el-button>
     </div>
 
-    <el-tree :data="sectionData" :props="defaultProps" @node-click="handleNodeClick">
+    <el-tree
+      :data="sectionData"
+      :props="defaultProps"
+      draggable
+      :allow-drop="dropHandle"
+      @node-drop="dropNodeHandle"
+      @node-click="handleNodeClick">
       <div class="section-row" slot-scope="{node, data}">
         <span>
           {{ node.label }}
@@ -41,7 +47,15 @@
         </span>
         <span v-else class="actions">
           <el-button size="mini" @click="editLessonHandle(data)">编辑</el-button>
-          <el-button type="success" size="mini">上传视频</el-button>
+          <el-button
+            type="success"
+            size="mini"
+            @click.stop="$router.push({
+            name: 'course-video',
+            params: {
+              lessonId: data.id
+            }
+          })">上传视频</el-button>
           <el-select
             v-model="data.status"
             size="mini"
@@ -111,7 +125,10 @@ import CreateOrEditLesson from '@/views/course/components/CreateOrEditLesson.vue
 
 export default Vue.extend({
   name: 'section',
-  components: { CreateOrEditLesson, CreateOrEditSection },
+  components: {
+    CreateOrEditLesson,
+    CreateOrEditSection
+  },
   props: {
     courseId: {
       type: [String, Number],
@@ -226,6 +243,33 @@ export default Vue.extend({
       this.editLessonId = lesson.id
       this.lessonDialogShow = true
       this.editLessonFlag = true
+    },
+    dropHandle (draggingNode: any, dropNode: any, type: string) {
+      return draggingNode.data.sectionId === dropNode.data.sectionId && type !== 'inner'
+    },
+    async dropNodeHandle (dragNode: any, dropNode: any, inner: any) {
+      try {
+        const res = dropNode.parent.childNodes.map((node: any, index: number) => {
+          if (node.data.sectionId) {
+            // 课时
+            return saveOrUpdateLesson({
+              id: node.data.id,
+              orderNum: index
+            })
+          } else {
+            // 章节
+            return saveOrUpdateSection({
+              id: node.data.id,
+              orderNum: index
+            })
+          }
+        })
+        await Promise.all(res)
+        this.$message.success('排序成功！')
+      } catch (e) {
+        console.log(e)
+        this.$message.error('排序失败！')
+      }
     }
   },
   created () {
