@@ -21,7 +21,7 @@
           {{ node.label }}
         </span>
         <span v-if="data.sectionName" class="actions">
-          <el-button size="mini">编辑</el-button>
+          <el-button size="mini" @click="editSectionHandle(data)">编辑</el-button>
           <el-button type="primary" size="mini">添加课时</el-button>
           <el-select
             v-model="data.status"
@@ -53,6 +53,8 @@
       v-if="sectionDialogShow"
       width="500px">
       <create-or-edit-section
+        :is-edit="editSectionFlag"
+        :sectionId="editSectionId"
         :course="course"
         @cancel="sectionDialogShow = false"
         @success="onSuccess"
@@ -100,7 +102,9 @@ export default Vue.extend({
           code: 2,
           label: '已更新'
         }
-      ]
+      ],
+      editSectionFlag: false,
+      editSectionId: ''
     }
   },
   methods: {
@@ -138,6 +142,11 @@ export default Vue.extend({
           section.status = data.data.status
           this.$message.info('取消')
         })
+    },
+    editSectionHandle (section: any) {
+      this.editSectionFlag = true
+      this.sectionDialogShow = true
+      this.editSectionId = section.id
     }
   },
   created () {

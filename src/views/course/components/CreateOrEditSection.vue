@@ -24,7 +24,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { saveOrUpdateSection } from '@/services/section'
+import { getBySectionId, saveOrUpdateSection } from '@/services/section'
 
 export default Vue.extend({
   name: 'CreateOrEditSection',
@@ -32,6 +32,14 @@ export default Vue.extend({
     course: {
       type: Object,
       default: () => ({})
+    },
+    isEdit: {
+      type: Boolean,
+      default: false
+    },
+    sectionId: {
+      type: [String, Number],
+      default: ''
     }
   },
   data () {
@@ -46,10 +54,18 @@ export default Vue.extend({
     }
   },
   methods: {
+    async initSection () {
+      const { data } = await getBySectionId(this.sectionId)
+      if (data.code === '000000') {
+        this.section = data.data
+      }
+      this.section.courseId = this.course.id
+      this.section.courseName = this.course.courseName
+    },
     async submit () {
       const { data } = await saveOrUpdateSection(this.section)
       if (data.code === '000000') {
-        this.$message.success('章节新增成功！')
+        this.$message.success(`章节${this.isEdit ? '编辑' : '新增'}成功！`)
         this.$emit('success')
       } else {
         this.$message.error(data.mesg)
@@ -57,8 +73,7 @@ export default Vue.extend({
     }
   },
   created () {
-    this.section.courseId = this.course.id
-    this.section.courseName = this.course.courseName
+    this.isEdit && this.initSection()
   }
 })
 </script>

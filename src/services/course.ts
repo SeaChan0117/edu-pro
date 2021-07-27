@@ -42,3 +42,11 @@ export const getCourseById = (courseId: any) => {
     }
   })
 }
+
+export const saveOrUpdateLesson = (data: any) => {
+  return request({
+    method: 'POST',
+    url: '/boss/course/lesson/saveOrUpdate',
+    data
+  })
+}
