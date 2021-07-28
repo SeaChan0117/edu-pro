@@ -53,6 +53,10 @@
             @click.stop="$router.push({
             name: 'course-video',
             params: {
+              courseId
+            },
+            query: {
+              sectionId: data.sectionId,
               lessonId: data.id
             }
           })">上传视频</el-button>
