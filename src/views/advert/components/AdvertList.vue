@@ -1,10 +1,10 @@
 <template>
-  <el-card class="advert-list" v-loading="loading">
+  <el-card class="advert-list" v-loading="loading" style="min-height: calc(100% - 2px)">
     <div slot="header" class="clearfix">
       <el-button type="primary" size="small">添加广告</el-button>
     </div>
 
-    <el-table :data="advertData" style="width: 100%" border>
+    <el-table :data="advertTableData" style="width: 100%" border>
       <el-table-column
         prop="id"
         label="ID"
@@ -68,20 +68,38 @@
         </template>
       </el-table-column>
     </el-table>
+    <br>
+    <el-pagination
+      :disabled="loading"
+      background
+      @size-change="handleSizeChange"
+      @current-change="handleCurrentChange"
+      :current-page="page.currentPage"
+      :page-sizes="[10, 20, 50]"
+      :page-size="page.pageSize"
+      layout="total, sizes, prev, pager, next, jumper"
+      :total="page.total">
+    </el-pagination>
   </el-card>
 </template>
 
 <script lang="ts">
 import Vue from 'vue'
-import { getAdList, getAllAdSpace, saveOrUpdateAd, updateAdStatus } from '@/services/advert'
+import { getAdList, getAllAdSpace, updateAdStatus } from '@/services/advert'
 
 export default Vue.extend({
   name: 'AdvertList',
   data () {
     return {
       advertData: [],
+      advertTableData: [],
       adSpaceArr: [] as any,
-      loading: false
+      loading: false,
+      page: {
+        currentPage: 1,
+        pageSize: 10,
+        total: 0
+      }
     }
   },
   methods: {
@@ -91,6 +109,8 @@ export default Vue.extend({
       if (data.success) {
         this.advertData = data.content
       }
+      this.page.total = this.advertData.length
+      this.pageChange()
       this.loading = false
     },
     async getAllSpace () {
@@ -113,6 +133,21 @@ export default Vue.extend({
         .catch(() => {
           ad.status = status === 1 ? 0 : 1
         })
+    },
+    handleSizeChange (val: number) {
+      this.page.pageSize = val
+      this.pageChange()
+    },
+    handleCurrentChange (val: number) {
+      this.page.currentPage = val
+      this.pageChange()
+    },
+    pageChange () {
+      const start = (this.page.currentPage - 1) * this.page.pageSize
+      let end = this.page.currentPage * this.page.pageSize
+      end = end <= this.advertData.length ? end : this.advertData.length
+      console.log(start, end)
+      this.advertTableData = this.advertData.slice(start, end)
     }
   },
   created () {
@@ -131,5 +166,7 @@ export default Vue.extend({
 </script>
 
 <style lang="scss" scoped>
-
+.el-pagination {
+  text-align: right;
+}
 </style>
