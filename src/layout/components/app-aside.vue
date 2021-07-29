@@ -1,13 +1,18 @@
 <template>
   <el-menu
-    default-active="2"
+    :default-active="curMenu"
     @open="handleOpen"
+    :collapse="isClose"
     @close="handleClose"
     background-color="#545c64"
     text-color="#fff"
     active-text-color="#ffd04b"
     router
   >
+    <el-menu-item index="/">
+      <i class="icon-lagou"></i>
+      <span slot="title"><h3 style="display: inherit;margin-left: 10px">Edu Boss</h3></span>
+    </el-menu-item>
     <el-submenu index="1">
       <template slot="title">
         <i class="el-icon-lock"></i>
@@ -56,6 +61,16 @@ import Vue from 'vue'
 
 export default Vue.extend({
   name: 'AppAside',
+  data () {
+    return {
+      curMenu: '/'
+    }
+  },
+  computed: {
+    isClose () {
+      return this.$store.state.isMenuClose
+    }
+  },
   methods: {
     handleOpen (key: string, keyPath: string): void {
       console.log(key, keyPath)
@@ -70,5 +85,13 @@ export default Vue.extend({
 <style lang="scss" scoped>
 .el-menu {
   min-height: 100vh;
+
+  .icon-lagou {
+    display: inline-block;
+    background-image: url("/logo.png");
+    width: 30px;
+    height: 30px;
+    background-size: 30px 30px;
+  }
 }
 </style>

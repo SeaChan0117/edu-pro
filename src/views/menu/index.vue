@@ -54,8 +54,8 @@
             label="操作"
             width="200">
             <template slot-scope="scope">
-              <el-button @click="editMenuHandle(scope.row)" size="small">编辑</el-button>
-              <el-button @click="delMenuHandle(scope.row)" type="danger" size="small">删除</el-button>
+              <el-button @click="editMenuHandle(scope.row)" type="primary" size="mini">编辑</el-button>
+              <el-button @click="delMenuHandle(scope.row)" type="danger" size="mini">删除</el-button>
             </template>
           </el-table-column>
         </el-table>

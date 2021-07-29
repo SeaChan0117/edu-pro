@@ -8,7 +8,7 @@
       <el-table-column
         prop="spaceKey"
         label="spaceKey"
-        width="100"
+        width="150"
       ></el-table-column>
       <el-table-column
         prop="name"

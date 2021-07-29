@@ -1,11 +1,14 @@
 <template>
   <div class="header">
-    <el-breadcrumb separator="/">
-      <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-      <el-breadcrumb-item :to="{ path: $route.path }">
-        {{ ($route.meta && $route.meta.title) ? $route.meta.title : $route.name }}
-      </el-breadcrumb-item>
-    </el-breadcrumb>
+    <div style="display: flex;height: 100%;align-items: center;">
+      <el-button :icon="icon" @click="setMenuClose(!$store.state.isMenuClose)" class="side-close-btn"></el-button>
+      <el-breadcrumb separator="/" style="display: inline-block">
+        <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
+        <el-breadcrumb-item :to="{ path: $route.path }">
+          {{ ($route.meta && $route.meta.title) ? $route.meta.title : $route.name }}
+        </el-breadcrumb-item>
+      </el-breadcrumb>
+    </div>
 
     <el-dropdown>
       <span class="el-dropdown-link">
@@ -23,6 +26,7 @@
 <script lang="ts">
 import Vue from 'vue'
 import { getUserInfo, logout } from '@/services/user'
+import { mapMutations } from 'vuex'
 
 export default Vue.extend({
   name: 'AppHeader',
@@ -31,7 +35,13 @@ export default Vue.extend({
       userInfo: {}
     }
   },
+  computed: {
+    icon () {
+      return this.$store.state.isMenuClose ? 'el-icon-s-unfold' : 'el-icon-s-fold'
+    }
+  },
   methods: {
+    ...mapMutations(['setMenuClose']),
     async loadUserInfo () {
       const { data } = await getUserInfo()
       if (data.state === 1) {
@@ -81,6 +91,21 @@ export default Vue.extend({
   display: flex;
   justify-content: space-between;
   align-items: center;
+
+  .side-close-btn {
+    height: 100%;
+    border: none;
+    border-radius: 0;
+    margin-right: 10px;
+  }
+
+  .side-close-btn:focus {
+    background: none;
+  }
+
+  .side-close-btn:hover {
+    background: rgba(0, 0, 0, .1);
+  }
 
   .el-dropdown-link {
     display: flex;

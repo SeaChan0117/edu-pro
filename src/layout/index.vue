@@ -1,10 +1,10 @@
 <template>
   <el-container>
-    <el-aside width="200px">
+    <el-aside :width="$store.state.isMenuClose ? '65px' : '200px'" style="position: sticky;top:0;max-height: 100vh">
       <app-aside></app-aside>
     </el-aside>
     <el-container>
-      <el-header>
+      <el-header style="position: sticky;top:0;z-index: 2;padding-left: 0">
         <app-header></app-header>
       </el-header>
       <el-main>
