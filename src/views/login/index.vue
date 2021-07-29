@@ -8,6 +8,8 @@
       label-width="80px"
       label-position="top"
     >
+      <H1 class="edu-boss-title">Edu boss管理系统</H1>
+      <el-divider></el-divider>
       <el-form-item label="手机号" prop="phone">
         <el-input v-model="form.phone"></el-input>
       </el-form-item>
@@ -22,6 +24,15 @@
           :loading="isLogin"
         >
           登录
+        </el-button>
+      </el-form-item>
+      <el-form-item>
+        <el-button
+          icon="el-icon-back"
+          @click="goClient"
+          style="width: 100%"
+        >
+          回到 用户端
         </el-button>
       </el-form-item>
     </el-form>
@@ -98,6 +109,9 @@ export default Vue.extend({
       }
 
       this.isLogin = false
+    },
+    goClient () {
+      window.open('http://edufront.lagou.com/', '_self')
     }
   }
 })
@@ -109,12 +123,24 @@ export default Vue.extend({
   display: flex;
   justify-content: center;
   align-items: center;
+  background-color: #00b38a;
+  background-image: url("../../assets/loginbg.png");
+  background-position: bottom;
+  background-repeat: no-repeat;
+  background-size: auto 112px;
 
   .login-form {
     width: 300px;
     background: #ffffff;
     padding: 20px;
     border-radius: 5px;
+
+    .edu-boss-title {
+      text-align: center;
+      color: rgba(0, 0, 0, .5);
+      transition: text-shadow .3s;
+      font-size: 3rem;
+    }
   }
 
   .login-btn {
