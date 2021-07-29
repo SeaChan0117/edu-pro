@@ -2,7 +2,9 @@
   <div class="header">
     <el-breadcrumb separator="/">
       <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-      <el-breadcrumb-item :to="{ path: $route.path }">{{ $route.name }}</el-breadcrumb-item>
+      <el-breadcrumb-item :to="{ path: $route.path }">
+        {{ ($route.meta && $route.meta.title) ? $route.meta.title : $route.name }}
+      </el-breadcrumb-item>
     </el-breadcrumb>
 
     <el-dropdown>
