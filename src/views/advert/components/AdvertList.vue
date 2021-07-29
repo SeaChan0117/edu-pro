@@ -95,9 +95,9 @@
       width="40%">
       <img style="width: 100%;" :src="imgUrl"/>
       <span slot="footer" class="dialog-footer">
-    <el-button @click="showImg = false">取 消</el-button>
-    <el-button type="primary" @click="showImg = false">确 定</el-button>
-  </span>
+        <el-button @click="showImg = false">取 消</el-button>
+        <el-button type="primary" @click="showImg = false">确 定</el-button>
+      </span>
     </el-dialog>
   </el-card>
 </template>
@@ -163,11 +163,19 @@ export default Vue.extend({
     },
     handleSizeChange (val: number) {
       this.page.pageSize = val
-      this.pageChange()
+      this.loading = true
+      setTimeout(() => {
+        this.pageChange()
+        this.loading = false
+      }, 500)
     },
     handleCurrentChange (val: number) {
       this.page.currentPage = val
-      this.pageChange()
+      this.loading = true
+      setTimeout(() => {
+        this.pageChange()
+        this.loading = false
+      }, 500)
     },
     pageChange () {
       const start = (this.page.currentPage - 1) * this.page.pageSize

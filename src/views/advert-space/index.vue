@@ -1,13 +1,13 @@
 <template>
-  <div class="advert-space">
-    广告位管理
-  </div>
+  <ad-space-list/>
 </template>
 
 <script lang="ts">
 import Vue from 'vue'
+import AdSpaceList from '@/views/advert-space/components/AdSpaceList.vue'
 export default Vue.extend({
-  name: 'AdvertSpaceIndex'
+  name: 'AdvertSpaceIndex',
+  components: { AdSpaceList }
 })
 </script>
 
