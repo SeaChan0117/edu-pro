@@ -32,7 +32,15 @@
         width="130"
       >
         <template slot-scope="scope">
-          <img width="100px" height="80px" :src="scope.row.img"/>
+          <img
+            style="cursor: pointer;"
+            width="100px"
+            height="80px"
+            @click="() => {
+              showImg = true
+              imgUrl = scope.row.img
+            }"
+            :src="scope.row.img"/>
         </template>
       </el-table-column>
       <el-table-column
@@ -80,6 +88,17 @@
       layout="total, sizes, prev, pager, next, jumper"
       :total="page.total">
     </el-pagination>
+
+    <el-dialog
+      title="广告图片预览"
+      :visible.sync="showImg"
+      width="40%">
+      <img style="width: 100%;" :src="imgUrl"/>
+      <span slot="footer" class="dialog-footer">
+    <el-button @click="showImg = false">取 消</el-button>
+    <el-button type="primary" @click="showImg = false">确 定</el-button>
+  </span>
+    </el-dialog>
   </el-card>
 </template>
 
@@ -99,7 +118,9 @@ export default Vue.extend({
         currentPage: 1,
         pageSize: 10,
         total: 0
-      }
+      },
+      showImg: false,
+      imgUrl: ''
     }
   },
   methods: {
@@ -146,7 +167,6 @@ export default Vue.extend({
       const start = (this.page.currentPage - 1) * this.page.pageSize
       let end = this.page.currentPage * this.page.pageSize
       end = end <= this.advertData.length ? end : this.advertData.length
-      console.log(start, end)
       this.advertTableData = this.advertData.slice(start, end)
     }
   },
