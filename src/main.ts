@@ -10,6 +10,7 @@ import dayjs from 'dayjs'
 import './styles/index.scss'
 
 Vue.use(ElementUI)
+Vue.prototype.$dayjs = dayjs
 Vue.filter('date', (value: any, format = 'YYYY-MM-DD HH:mm:ss') => {
   return dayjs(value).format(format)
 })
