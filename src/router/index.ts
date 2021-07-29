@@ -113,6 +113,17 @@ const routes: Array<RouteConfig> = [
         name: 'course-video',
         component: () => import(/* webpackChunkNameL 'course-video' */ '@/views/course/video.vue'),
         props: true
+      },
+      {
+        path: '/advert/create',
+        name: 'advert-create',
+        component: () => import(/* webpackChunkNameL 'advert-create' */ '@/views/advert/create.vue')
+      },
+      {
+        path: '/advert/:advertId/edit',
+        name: 'advert-edit',
+        component: () => import(/* webpackChunkNameL 'advert-create' */ '@/views/advert/edit.vue'),
+        props: true
       }
     ]
   }

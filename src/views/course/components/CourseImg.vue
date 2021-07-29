@@ -51,8 +51,12 @@ export default Vue.extend({
         this.progress = Math.floor(e.loaded / e.total * 100)
         console.log(this.progress)
       })
+      if (data.code === '000000') {
+        this.$emit('input', data.data.name)
+      } else {
+        this.$message.error(data.mesg)
+      }
       this.isUploading = false
-      this.$emit('input', data.data.name)
     },
     beforeAvatarUpload (file: any) {
       const isJPG = file.type === 'image/jpeg'

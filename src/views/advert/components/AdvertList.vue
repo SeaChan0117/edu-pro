@@ -1,7 +1,7 @@
 <template>
   <el-card class="advert-list" v-loading="loading" style="min-height: calc(100% - 2px)">
     <div slot="header" class="clearfix">
-      <el-button type="primary" size="small">添加广告</el-button>
+      <el-button type="primary" size="small" @click="$router.push({name: 'advert-create'})">添加广告</el-button>
     </div>
 
     <el-table :data="advertTableData" style="width: 100%" border>
@@ -142,6 +142,12 @@ export default Vue.extend({
     },
     editHandle (ad: any) {
       console.log(ad)
+      this.$router.push({
+        name: 'advert-edit',
+        params: {
+          advertId: ad.id
+        }
+      })
     },
     changeStatus (status: any, ad: any) {
       this.$confirm('是否要修改上线/下线状态?', '修改提示')

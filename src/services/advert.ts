@@ -32,3 +32,13 @@ export const updateAdStatus = (id: any, status: any) => {
     }
   })
 }
+
+export const getAdById = (id: any) => {
+  return request({
+    method: 'GET',
+    url: '/front/ad/getAdById',
+    params: {
+      id
+    }
+  })
+}
